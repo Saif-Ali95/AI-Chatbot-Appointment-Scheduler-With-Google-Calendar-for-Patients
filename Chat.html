@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>MedCare Portal & Chatbot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Segoe UI', sans-serif; background: #f0f8ff; }
+    header, footer {
+      position: fixed; left: 0; right: 0; background: #004aad; color: white;
+      text-align: center; padding: 16px; z-index: 1000;
+    }
+    header { top: 0; height: 80px; }
+    footer { bottom: 0; height: 60px; font-size: 14px; }
+    main {
+      margin-top: 80px; margin-bottom: 60px;
+      height: calc(100vh - 140px); overflow-y: auto; padding: 20px;
+    }
+    .header-banner { width:100%; height:250px;
+      background: url('https://i.imgur.com/Layer1.jpg') no-repeat center;
+      background-size:cover; position:relative; margin-bottom:20px;
+      border-radius:10px;
+    }
+    .header-banner::after {
+      content: ''; position:absolute; inset:0;
+      background:rgba(0,90,170,0.4); border-radius:10px;
+    }
+    .header-banner h1 {
+      position:absolute; bottom:16px; left:24px; color:#fff;
+      font-size:32px; z-index:1; text-shadow:2px 2px 6px rgba(0,0,0,0.7);
+    }
+    .overlay { background:rgba(255,255,255,0.96); max-width:1200px;
+      margin:0 auto; padding:40px; border-radius:12px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.1);
+    }
+    .container { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+    .card { background:#fff; width:260px; padding:20px; border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:center; position: relative;
+    }
+    .card img { width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:12px; }
+    .doctor-name { color:#e65300; font-size:18px; font-weight:600; margin:6px 0; }
+    .designation { font-size:14px; font-weight:600; color:#333; margin:4px 0; }
+    .details { font-size:13px; color:#555; margin:8px 0 16px; }
+    .btn { display:inline-block; padding:8px 16px; border:2px solid #004aad;
+      color:#004aad; border-radius:30px; font-weight:600; cursor:pointer;
+      transition:0.3s; margin-bottom:10px;
+    }
+    .btn:hover { background:#004aad; color:#fff; }
+    .slots { display:none; margin-top:12px; text-align:left; position: relative; z-index:2; }
+    .slot-button { margin:4px; padding:6px 10px; border:1px solid #0077cc;
+      background:#f0faff; border-radius:5px; font-size:13px; color:#0077cc;
+      cursor:pointer; transition:0.2s;
+    }
+    .slot-button:hover { background:#0077cc; color:#fff; }
+  </style>
+  <!-- n8n Chat Widget Embed -->
+  <script type="module" defer>
+    import Chatbot from "https://cdn.n8nchatui.com/v1/embed.js";
+    Chatbot.init({
+      n8nChatUrl: "https://periscope-tech.app.n8n.cloud/webhook/8f427031-1110-4ea3-aef7-5d06ba7d5bce/chat",
+      metadata: {},
+      theme: {
+        button: {
+          backgroundColor: "#b8ffc6",
+          right: 20, bottom: 20, size: 50,
+          iconColor: "#373434",
+          customIconSrc: "https://www.svgrepo.com/show/339963/chat-bot.svg",
+          customIconSize: 60, customIconBorderRadius: 15,
+          autoWindowOpen: { autoOpen: false, openDelay: 2 },
+          borderRadius: "circle"
+        },
+        tooltip: {
+          showTooltip: true,
+          tooltipMessage: "Hello 👋 Patient",
+          tooltipBackgroundColor: "#fff9f6",
+          tooltipTextColor: "#1c1c1c",
+          tooltipFontSize: 15
+        },
+        chatWindow: {
+          borderRadiusStyle: "rounded",
+          avatarBorderRadius: 20, messageBorderRadius: 5,
+          showTitle: true, title: "MedCare Chatbot",
+          titleAvatarSrc: "https://www.svgrepo.com/show/339963/chat-bot.svg",
+          avatarSize: 34,
+          welcomeMessage: "Hello! How can I assist you with appointments today?",
+          errorMessage: "Please connect me to n8n first",
+          backgroundColor: "#ffffff",
+          height: 600, width: 400, fontSize: 16,
+          starterPrompts: ["Book Appointment", "Cancel Appointment"],
+          starterPromptFontSize: 15,
+          renderHTML: false, clearChatOnReload: false, showScrollbar: false,
+          botMessage: {
+            backgroundColor: "#6239f3", textColor: "#fafafa", showAvatar: true,
+            avatarSrc: "https://www.svgrepo.com/show/334455/bot.svg"
+          },
+          userMessage: {
+            backgroundColor: "#fff6f3", textColor: "#050505", showAvatar: true,
+            avatarSrc: "https://www.svgrepo.com/show/532363/user-alt-1.svg"
+          },
+          textInput: {
+            placeholder: "Type your query",
+            backgroundColor: "#ffffff", textColor: "#1e1e1f",
+            sendButtonColor: "#f36539", maxChars: 50,
+            maxCharsWarningMessage: "You exceeded the characters limit. Please input less than 50 characters.",
+            autoFocus: false, borderRadius: 6, sendButtonBorderRadius: 50
+          },
+          uploadsConfig: {
+            enabled: true, acceptFileTypes: ["jpeg","jpg","png","pdf"],
+            maxFiles: 5, maxSizeInMB: 10
+          },
+          voiceInputConfig: {
+            enabled: true, maxRecordingTime: 15,
+            recordingNotSupportedMessage: "To record audio, use modern browsers like Chrome or Firefox that support audio recording"
+          }
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+  <header>Welcome to MedCare Portal</header>
+  <main>
+    <div class="header-banner"><h1>Our Expert Doctors</h1></div>
+    <div class="overlay">
+      <div class="container">
+        <div class="card" data-doctor="Dr. Sameer Kapoor">
+          <img src="https://hinduja-prod-assets.s3.ap-south-1.amazonaws.com/s3fs-public/styles/thumbnail/public/2021-11/murad-lala.png" alt="Dr Sameer Kapoor">
+          <div class="doctor-name">Dr. Sameer Kapoor</div>
+          <div class="designation">Cardiologist</div>
+          <div class="details">MD, DM (Cardiology)</div>
+          <div class="btn book-btn">BOOK APPOINTMENT</div>
+          <div class="slots"></div>
+        </div>
+        <div class="card" data-doctor="Dr. Charles Bond">
+          <img src="https://hinduja-prod-assets.s3.ap-south-1.amazonaws.com/s3fs-public/styles/thumbnail/public/2021-11/c-balakrishnan.png" alt="Dr Charles Bond">
+          <div class="doctor-name">Dr. Charles Bond</div>
+          <div class="designation">Histopathologist</div>
+          <div class="details">MD, FIC Path</div>
+          <div class="btn book-btn">BOOK APPOINTMENT</div>
+          <div class="slots"></div>
+        </div>
+        <div class="card" data-doctor="Dr. Alan Almeida">
+          <img src="https://hinduja-prod-assets.s3.ap-south-1.amazonaws.com/s3fs-public/styles/thumbnail/public/2021-11/alan-almeida.png" alt="Dr Alan Almeida">
+          <div class="doctor-name">Dr. Alan Almeida</div>
+          <div class="designation">Nephrologist & Transplant</div>
+          <div class="details">MD, MNAMS</div>
+          <div class="btn book-btn">BOOK APPOINTMENT</div>
+          <div class="slots"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>© 2025 MedCare Inc. | All rights reserved.</footer>
+
+  <script>
+    const times = ['09:00 AM','10:30 AM','12:00 PM','02:00 PM','04:00 PM'];
+    const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSezR-OuVn4ztP_cWhq0fAL8XZXRSGbYtXjQgpD9WQ8F1aji6A/viewform?usp=sharing";
+    document.querySelectorAll('.book-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        const provider = encodeURIComponent(card.querySelector('.doctor-name').textContent + ', ' + card.querySelector('.details').textContent);
+        const slotsEl = card.querySelector('.slots');
+        slotsEl.innerHTML = '<div>Select a time slot:</div>';
+        slotsEl.style.display = 'block';
+        times.forEach(t => {
+          const b = document.createElement('button');
+          b.textContent = t; b.className = 'slot-button';
+          b.onclick = () => {
+            window.open(\`\${formBaseURL}?entry.208956724=\${provider}&entry.839337160=\${encodeURIComponent(t)}\`, '_blank');
+          };
+          slotsEl.appendChild(b);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
